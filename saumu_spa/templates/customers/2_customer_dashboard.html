@@ -1,0 +1,323 @@
+<!-- templates/2_customer_dashboard.html -->
+{% extends '2_base.html' %}
+
+{% block title %}Dashboard - Saumu Salim Barbershop & Spa{% endblock %}
+
+{% block content %}
+<!-- Dashboard Navigation -->
+<section class="py-5">
+    <div class="container">
+        <h2 class="mb-4">Customer Dashboard</h2>
+
+        <!-- Tabs for Desktop -->
+        <ul class="nav nav-tabs d-none d-md-flex" id="dashboardTabs" role="tablist">
+            <li class="nav-item" role="presentation">
+                <button class="nav-link active" id="upcoming-tab" data-bs-toggle="tab" data-bs-target="#upcoming" type="button" role="tab" aria-controls="upcoming" aria-selected="true">Upcoming Appointments</button>
+            </li>
+            <li class="nav-item" role="presentation">
+                <button class="nav-link" id="history-tab" data-bs-toggle="tab" data-bs-target="#history" type="button" role="tab" aria-controls="history" aria-selected="false">Appointment History</button>
+            </li>
+            <li class="nav-item" role="presentation">
+                <button class="nav-link" id="points-tab" data-bs-toggle="tab" data-bs-target="#points" type="button" role="tab" aria-controls="points" aria-selected="false">Loyalty Points</button>
+            </li>
+            <li class="nav-item" role="presentation">
+                <button class="nav-link" id="payments-tab" data-bs-toggle="tab" data-bs-target="#payments" type="button" role="tab" aria-controls="payments" aria-selected="false">Payment History</button>
+            </li>
+            <li class="nav-item" role="presentation">
+                <button class="nav-link" id="profile-tab" data-bs-toggle="tab" data-bs-target="#profile" type="button" role="tab" aria-controls="profile" aria-selected="false">Profile Settings</button>
+            </li>
+            <li class="nav-item" role="presentation">
+                <button class="nav-link" id="notifications-tab" data-bs-toggle="tab" data-bs-target="#notifications" type="button" role="tab" aria-controls="notifications" aria-selected="false">Notifications</button>
+            </li>
+        </ul>
+
+        <!-- Accordion for Mobile -->
+        <div class="d-md-none">
+            <div class="accordion" id="mobileDashboardAccordion">
+                <!-- Upcoming Appointments -->
+                <div class="accordion-item">
+                    <h2 class="accordion-header" id="headingUpcoming">
+                        <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseUpcoming" aria-expanded="true" aria-controls="collapseUpcoming">
+                            Upcoming Appointments
+                        </button>
+                    </h2>
+                    <div id="collapseUpcoming" class="accordion-collapse collapse show" aria-labelledby="headingUpcoming" data-bs-parent="#mobileDashboardAccordion">
+                        <div class="accordion-body">
+                            <table class="table table-striped">
+                                <thead>
+                                    <tr>
+                                        <th>Date</th>
+                                        <th>Time</th>
+                                        <th>Service</th>
+                                        <th>Status</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>2025-02-20</td>
+                                        <td>10:00 AM</td>
+                                        <td>Signature Haircut</td>
+                                        <td><span class="badge bg-success">Confirmed</span></td>
+                                    </tr>
+                                    <tr>
+                                        <td>2025-02-22</td>
+                                        <td>3:00 PM</td>
+                                        <td>Relaxing Massage</td>
+                                        <td><span class="badge bg-warning">Pending</span></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Appointment History -->
+                <div class="accordion-item">
+                    <h2 class="accordion-header" id="headingHistory">
+                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseHistory" aria-expanded="false" aria-controls="collapseHistory">
+                            Appointment History
+                        </button>
+                    </h2>
+                    <div id="collapseHistory" class="accordion-collapse collapse" aria-labelledby="headingHistory" data-bs-parent="#mobileDashboardAccordion">
+                        <div class="accordion-body">
+                            <table class="table table-striped">
+                                <thead>
+                                    <tr>
+                                        <th>Date</th>
+                                        <th>Time</th>
+                                        <th>Service</th>
+                                        <th>Status</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>2025-02-15</td>
+                                        <td>11:00 AM</td>
+                                        <td>Rejuvenating Facial</td>
+                                        <td><span class="badge bg-secondary">Completed</span></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Loyalty Points -->
+                <div class="accordion-item">
+                    <h2 class="accordion-header" id="headingPoints">
+                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapsePoints" aria-expanded="false" aria-controls="collapsePoints">
+                            Loyalty Points
+                        </button>
+                    </h2>
+                    <div id="collapsePoints" class="accordion-collapse collapse" aria-labelledby="headingPoints" data-bs-parent="#mobileDashboardAccordion">
+                        <div class="accordion-body">
+                            <p><strong>Total Points:</strong> 150</p>
+                            <p><strong>Points Earned This Month:</strong> 50</p>
+                            <p><strong>Points Redeemed:</strong> 20</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Payment History -->
+                <div class="accordion-item">
+                    <h2 class="accordion-header" id="headingPayments">
+                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapsePayments" aria-expanded="false" aria-controls="collapsePayments">
+                            Payment History
+                        </button>
+                    </h2>
+                    <div id="collapsePayments" class="accordion-collapse collapse" aria-labelledby="headingPayments" data-bs-parent="#mobileDashboardAccordion">
+                        <div class="accordion-body">
+                            <table class="table table-striped">
+                                <thead>
+                                    <tr>
+                                        <th>Date</th>
+                                        <th>Amount</th>
+                                        <th>Service</th>
+                                        <th>Payment Method</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>2025-02-15</td>
+                                        <td>$80</td>
+                                        <td>Rejuvenating Facial</td>
+                                        <td>MPesa</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Profile Settings -->
+                <div class="accordion-item">
+                    <h2 class="accordion-header" id="headingProfile">
+                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseProfile" aria-expanded="false" aria-controls="collapseProfile">
+                            Profile Settings
+                        </button>
+                    </h2>
+                    <div id="collapseProfile" class="accordion-collapse collapse" aria-labelledby="headingProfile" data-bs-parent="#mobileDashboardAccordion">
+                        <div class="accordion-body">
+                            <form>
+                                <div class="mb-3">
+                                    <label for="firstName" class="form-label">First Name</label>
+                                    <input type="text" class="form-control" id="firstName" value="John">
+                                </div>
+                                <div class="mb-3">
+                                    <label for="lastName" class="form-label">Last Name</label>
+                                    <input type="text" class="form-control" id="lastName" value="Doe">
+                                </div>
+                                <div class="mb-3">
+                                    <label for="email" class="form-label">Email</label>
+                                    <input type="email" class="form-control" id="email" value="john.doe@example.com">
+                                </div>
+                                <div class="mb-3">
+                                    <label for="phone" class="form-label">Phone</label>
+                                    <input type="tel" class="form-control" id="phone" value="+1234567890">
+                                </div>
+                                <button type="submit" class="btn btn-primary">Save Changes</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Notifications -->
+                <div class="accordion-item">
+                    <h2 class="accordion-header" id="headingNotifications">
+                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseNotifications" aria-expanded="false" aria-controls="collapseNotifications">
+                            Notifications
+                        </button>
+                    </h2>
+                    <div id="collapseNotifications" class="accordion-collapse collapse" aria-labelledby="headingNotifications" data-bs-parent="#mobileDashboardAccordion">
+                        <div class="accordion-body">
+                            <ul class="list-group">
+                                <li class="list-group-item">Your appointment is confirmed for 2025-02-20 at 10:00 AM.</li>
+                                <li class="list-group-item">You have earned 50 loyalty points this month!</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Tab Content for Desktop -->
+        <div class="tab-content mt-4 d-none d-md-block" id="dashboardTabsContent">
+            <!-- Upcoming Appointments -->
+            <div class="tab-pane fade show active" id="upcoming" role="tabpanel" aria-labelledby="upcoming-tab">
+                <h3>Upcoming Appointments</h3>
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>Date</th>
+                            <th>Time</th>
+                            <th>Service</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>2025-02-20</td>
+                            <td>10:00 AM</td>
+                            <td>Signature Haircut</td>
+                            <td><span class="badge bg-success">Confirmed</span></td>
+                        </tr>
+                        <tr>
+                            <td>2025-02-22</td>
+                            <td>3:00 PM</td>
+                            <td>Relaxing Massage</td>
+                            <td><span class="badge bg-warning">Pending</span></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Appointment History -->
+            <div class="tab-pane fade" id="history" role="tabpanel" aria-labelledby="history-tab">
+                <h3>Appointment History</h3>
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>Date</th>
+                            <th>Time</th>
+                            <th>Service</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>2025-02-15</td>
+                            <td>11:00 AM</td>
+                            <td>Rejuvenating Facial</td>
+                            <td><span class="badge bg-secondary">Completed</span></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Loyalty Points -->
+            <div class="tab-pane fade" id="points" role="tabpanel" aria-labelledby="points-tab">
+                <h3>Loyalty Points</h3>
+                <p><strong>Total Points:</strong> 150</p>
+                <p><strong>Points Earned This Month:</strong> 50</p>
+                <p><strong>Points Redeemed:</strong> 20</p>
+            </div>
+
+            <!-- Payment History -->
+            <div class="tab-pane fade" id="payments" role="tabpanel" aria-labelledby="payments-tab">
+                <h3>Payment History</h3>
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>Date</th>
+                            <th>Amount</th>
+                            <th>Service</th>
+                            <th>Payment Method</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>2025-02-15</td>
+                            <td>$80</td>
+                            <td>Rejuvenating Facial</td>
+                            <td>MPesa</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Profile Settings -->
+            <div class="tab-pane fade" id="profile" role="tabpanel" aria-labelledby="profile-tab">
+                <h3>Profile Settings</h3>
+                <form>
+                    <div class="mb-3">
+                        <label for="firstName" class="form-label">First Name</label>
+                        <input type="text" class="form-control" id="firstName" value="John">
+                    </div>
+                    <div class="mb-3">
+                        <label for="lastName" class="form-label">Last Name</label>
+                        <input type="text" class="form-control" id="lastName" value="Doe">
+                    </div>
+                    <div class="mb-3">
+                        <label for="email" class="form-label">Email</label>
+                        <input type="email" class="form-control" id="email" value="john.doe@example.com">
+                    </div>
+                    <div class="mb-3">
+                        <label for="phone" class="form-label">Phone</label>
+                        <input type="tel" class="form-control" id="phone" value="+1234567890">
+                    </div>
+                    <button type="submit" class="btn btn-primary">Save Changes</button>
+                </form>
+            </div>
+
+            <!-- Notifications -->
+            <div class="tab-pane fade" id="notifications" role="tabpanel" aria-labelledby="notifications-tab">
+                <h3>Notifications</h3>
+                <ul class="list-group">
+                    <li class="list-group-item">Your appointment is confirmed for 2025-02-20 at 10:00 AM.</li>
+                    <li class="list-group-item">You have earned 50 loyalty points this month!</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

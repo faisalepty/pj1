@@ -1,0 +1,15 @@
+<!-- templates/customers/register_prompt.html -->
+{% extends 'base.html' %}
+
+{% block title %}Register to Track Your Loyalty Points{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-6">
+        <h2>Thank You for Booking!</h2>
+        <p>To track your loyalty points and view your appointment history, please register for an account.</p>
+        <a href="{% url 'register' %}" class="btn btn-primary">Register Now</a>
+        <a href="{% url 'home' %}" class="btn btn-secondary">Skip for Now</a>
+    </div>
+</div>
+{% endblock %}

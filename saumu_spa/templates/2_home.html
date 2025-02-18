@@ -1,0 +1,116 @@
+<!-- templates/2_home.html -->
+{% extends '2_base.html' %}
+
+{% block title %}Home - Saumu Salim Barbershop & Spa{% endblock %}
+
+{% block content %}
+<!-- Hero Section -->
+<div id="heroCarousel" class="carousel slide hero-section" data-bs-ride="carousel">
+    <div class="carousel-inner">
+        <!-- Slide 1: Promotional Offer -->
+        <div class="carousel-item active">
+            <img src="https://via.placeholder.com/1920x1080" class="d-block w-100" alt="Promotional Offer">
+            <div class="carousel-caption d-none d-md-block">
+                <h2>20% Off on Massages!</h2>
+                <p>Relax and rejuvenate with our exclusive massage offers.</p>
+                <a href="#" class="btn btn-primary">Book Now</a>
+            </div>
+        </div>
+
+        <!-- Slide 2: Featured Service -->
+        <div class="carousel-item">
+            <img src="https://via.placeholder.com/1920x1080" class="d-block w-100" alt="Featured Service">
+            <div class="carousel-caption d-none d-md-block">
+                <h2>Signature Haircut</h2>
+                <p>Experience the art of precision with our signature haircut.</p>
+                <a href="#" class="btn btn-primary">Learn More</a>
+            </div>
+        </div>
+
+        <!-- Slide 3: General Branding -->
+        <div class="carousel-item">
+            <img src="https://via.placeholder.com/1920x1080" class="d-block w-100" alt="General Branding">
+            <div class="carousel-caption d-none d-md-block">
+                <h2>Welcome to Saumu Salim Barbershop & Spa</h2>
+                <p>Your ultimate destination for grooming and relaxation.</p>
+                <button class="btn btn-primary book-now-btn" data-service-id="1">Book Now</button>
+   
+            </div>
+        </div>
+    </div>
+
+    <!-- Carousel Controls -->
+    <button class="carousel-control-prev" type="button" data-bs-target="#heroCarousel" data-bs-slide="prev">
+        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+        <span class="visually-hidden">Previous</span>
+    </button>
+    <button class="carousel-control-next" type="button" data-bs-target="#heroCarousel" data-bs-slide="next">
+        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+        <span class="visually-hidden">Next</span>
+    </button>
+</div>
+
+<!-- Featured Services Section -->
+<section class="py-5">
+    <div class="container">
+        <h2 class="text-center mb-4">Our Featured Services</h2>
+        <div class="row">
+            <!-- Service Card 1 -->
+            {% for service in featured_services %}
+            <div class="col-md-4 mb-4">
+                <div class="card h-100">
+                    <img src="https://via.placeholder.com/300x200" class="card-img-top" alt="Haircut">
+                    <div class="card-body">
+                        <h5 class="card-title">{{ service.name}}</h5>
+                        <p class="card-text">{{ service.description}}</p>
+                        <p><strong>Price:</strong>{{ service.price}}</p>
+                        <p><strong>Duration:</strong> {{ service.duration }}</p>
+                      <button class="btn btn-primary book-now-btn" data-service-id="{{ service.id }}">Book Now</button>
+   
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+            <!-- Service Card 2 -->
+            <div class="col-md-4 mb-4">
+                <div class="card h-100">
+                    <img src="https://via.placeholder.com/300x200" class="card-img-top" alt="Massage">
+                    <div class="card-body">
+                        <h5 class="card-title">Relaxing Massage</h5>
+                        <p class="card-text">Unwind with our soothing massage therapy.</p>
+                        <p><strong>Price:</strong> $70</p>
+                        <p><strong>Duration:</strong> 60 mins</p>
+                       <button class="btn btn-primary book-now-btn" data-service-id="1">Book Now</button>
+   
+                    </div>
+                </div>
+            </div>
+
+            <!-- Service Card 3 -->
+            <div class="col-md-4 mb-4">
+                <div class="card h-100">
+                    <img src="https://via.placeholder.com/300x200" class="card-img-top" alt="Facial">
+                    <div class="card-body">
+                        <h5 class="card-title">Rejuvenating Facial</h5>
+                        <p class="card-text">Revitalize your skin with our premium facial treatments.</p>
+                        <p><strong>Price:</strong> $80</p>
+                        <p><strong>Duration:</strong> 45 mins</p>
+                       <button class="btn btn-primary book-now-btn" data-service-id="1">Book Now</button>
+   
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Call-to-Action Section -->
+<section class="bg-light py-5">
+    <div class="container text-center">
+        <h2>Ready to Book Your Appointment?</h2>
+        <p>Experience the best grooming and relaxation services in town.</p>
+       <button class="btn btn-primary book-now-btn" data-service-id="1">Book Now</button>
+   
+    </div>
+</section>
+{% endblock %}

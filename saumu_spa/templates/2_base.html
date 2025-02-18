@@ -1,0 +1,413 @@
+<!-- templates/2_base.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Saumu Salim Barbershop & Spa{% endblock %}</title>
+
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Custom Styles -->
+    <style>
+        body {
+            font-family: 'Playfair Display', serif;
+            background-color: #f8f9fa;
+        }
+        .navbar {
+            background-color: #343a40;
+        }
+        .navbar-brand, .nav-link {
+            color: gold !important;
+        }
+        .hero-section {
+            background: url('https://via.placeholder.com/1920x1080') no-repeat center center/cover;
+            color: white;
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+        }
+        .footer {
+            background-color: #343a40;
+            color: white;
+            padding: 20px 0;
+            text-align: center;
+        }
+        .modal-content {
+            border-radius: 10px;
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation Bar -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
+        <div class="container">
+            <a class="navbar-brand" href="{% url 'home' %}">Saumu Salim Barbershop & Spa</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'home' %}">Home</a>
+                    </li>
+                    {% if user.is_staff %}
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'services' %}">Services</a>
+                    </li>
+                    {% endif%}
+                    <li class="nav-item">
+                        <a class="nav-link" href="">About Us</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="">Contact Us</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="">FAQ</a>
+                    </li>
+                    {% if user.is_authenticated %}
+                        <li class="nav-item">
+                            <a class="nav-link" href="{% url 'customer_dashboard' %}">Dashboard</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{% url 'logout' %}">Logout</a>
+                        </li>
+                    {% else %}
+                        <li class="nav-item">
+                            <a class="nav-link" href="#" data-bs-toggle="modal" data-bs-target="#loginModal">Login</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#" data-bs-toggle="modal" data-bs-target="#registerModal">Register</a>
+                        </li>
+                    {% endif %}
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <div class="container mt-5">
+        {% block content %}
+        <!-- Default content goes here -->
+        {% endblock %}
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <p>&copy; 2025 Saumu Salim Barbershop & Spa. All rights reserved.</p>
+            <p>Contact: +123 456 7890 | Email: info@saumusalim.com</p>
+            <div class="social-icons">
+                <a href="#"><i class="bi bi-facebook"></i></a>
+                <a href="#"><i class="bi bi-instagram"></i></a>
+                <a href="#"><i class="bi bi-twitter"></i></a>
+            </div>
+        </div>
+    </footer>
+
+   <!-- Login Modal -->
+<div class="modal fade" id="loginModal" tabindex="-1" aria-labelledby="loginModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="loginModalLabel">Login</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form id="loginForm">
+                    <div class="mb-3">
+                        <label for="username" class="form-label">Username</label>
+                        <input type="text" class="form-control" id="username" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="password" class="form-label">Password</label>
+                        <input type="password" class="form-control" id="password" required>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Login</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Register Modal -->
+<div class="modal fade" id="registerModal" tabindex="-1" aria-labelledby="registerModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="registerModalLabel">Register</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form id="registerForm">
+                    <div class="mb-3">
+                        <label for="username" class="form-label">Username</label>
+                        <input type="text" class="form-control" id="username" placeholder="Enter a unique username" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="first_name" class="form-label">First Name</label>
+                        <input type="text" class="form-control" id="first_name" placeholder="Enter your first name" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="last_name" class="form-label">Last Name</label>
+                        <input type="text" class="form-control" id="last_name" placeholder="Enter your last name" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="email" class="form-label">Email</label>
+                        <input type="email" class="form-control" id="email" placeholder="Enter your email address" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="phone_number" class="form-label">Phone Number</label>
+                        <input type="tel" class="form-control" id="phone_number" placeholder="Enter your phone number" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="password" class="form-label">Password</label>
+                        <input type="password" class="form-control" id="password" placeholder="Enter a strong password" required>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Register</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Booking Modal -->
+<div class="modal fade" id="bookingModal" tabindex="-1" aria-labelledby="bookingModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="bookingModalLabel">Book Appointment</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form id="bookingForm">
+                    <input type="hidden" id="serviceId" name="service_id">
+                    <div class="mb-3">
+                        <label for="date" class="form-label">Date</label>
+                        <input type="date" class="form-control" id="date" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="time" class="form-label">Time</label>
+                        <input type="time" class="form-control" id="time" required>
+                    </div>
+                    {% if not user.is_authenticated %}
+                        <div class="mb-3">
+                            <label for="first_name" class="form-label">First Name</label>
+                            <input type="text" class="form-control" id="b_first_name" placeholder="Enter your first name" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="last_name" class="form-label">Last Name</label>
+                            <input type="text" class="form-control" id="b_last_name" placeholder="Enter your last name" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="email" class="form-label">Email</label>
+                            <input type="email" class="form-control" id="b_email" placeholder="Enter your email address" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="phone_number" class="form-label">Phone Number</label>
+                            <input type="tel" class="form-control" id="b_phone_number" placeholder="Enter your phone number" required>
+                        </div>
+                    {% endif %}
+                    <button type="submit" class="btn btn-primary">Submit</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+    <!-- Booking Confirmation Modal -->
+    <div class="modal fade" id="bookingConfirmationModal" tabindex="-1" aria-labelledby="bookingConfirmationModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="bookingConfirmationModalLabel">Booking Confirmation</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <p><strong>Appointment Details:</strong></p>
+                    <ul>
+                        <li>Date: <span id="confirmationDate"></span></li>
+                        <li>Time: <span id="confirmationTime"></span></li>
+                        <li>Service: <span id="confirmationService"></span></li>
+                        <li>Total Cost: <span id="confirmationCost"></span></li>
+                        <li>Loyalty Points Earned: <span id="confirmationPoints"></span></li>
+                    </ul>
+                    <p>Thank you for booking with us!</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Success/Error Modal -->
+    <div class="modal fade" id="messageModal" tabindex="-1" aria-labelledby="messageModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="messageModalLabel">Message</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body" id="messageBody">
+                    <!-- Dynamic message content -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bootstrap JS and dependencies -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+   
+    <script>
+     // Function to get the CSRF token from cookies
+function getCookie(name) {
+    let cookieValue = null;
+    if (document.cookie && document.cookie !== '') {
+        const cookies = document.cookie.split(';');
+        for (let i = 0; i < cookies.length; i++) {
+            const cookie = cookies[i].trim();
+            // Does this cookie string begin with the name we want?
+            if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                break;
+            }
+        }
+    }
+    return cookieValue;
+}
+
+// Set up CSRF token for all AJAX requests
+const csrftoken = getCookie('csrftoken');
+$.ajaxSetup({
+    beforeSend: function(xhr, settings) {
+        if (!/^(GET|HEAD|OPTIONS|TRACE)$/i.test(settings.type) && !this.crossDomain) {
+            xhr.setRequestHeader("X-CSRFToken", csrftoken);
+        }
+    }
+});
+    </script>
+    <script type="text/javascript">
+        $('#loginForm').on('submit', function(e) {
+    e.preventDefault();
+    const username = $('#username').val();
+    const password = $('#password').val();
+
+    $.ajax({
+        url: "{% url 'login' %}", // URL to the Django login view
+        method: "POST",
+        data: { username, password },
+        success: function(response) {
+            if (response.success) {
+                $('#loginModal').modal('hide');
+                $('#messageBody').text('Login successful!');
+                $('#messageModal').modal('show');
+                setTimeout(() => {
+                    window.location.href = "{% url 'home' %}"; // Redirect to home page
+                }, 2000);
+            } else {
+                $('#messageBody').text(response.error);
+                $('#messageModal').modal('show');
+            }
+        },
+        error: function() {
+            $('#messageBody').text('An unexpected error occurred. Please try again.');
+            $('#messageModal').modal('show');
+        }
+    });
+});
+    </script>
+    <script type="text/javascript">
+        $('#registerForm').on('submit', function(e) {
+    e.preventDefault();
+    const username = $('#username').val();
+    const first_name = $('#first_name').val();
+    const last_name = $('#last_name').val();
+    const email = $('#email').val();
+    const phone_number = $('#phone_number').val();
+    const password = $('#password').val();
+
+    $.ajax({
+        url: "{% url 'register' %}", // URL to the Django register view
+        method: "POST",
+        data: {username, first_name, last_name, email, phone_number, password },
+        success: function(response) {
+            if (response.success) {
+                $('#registerModal').modal('hide');
+                $('#messageBody').text('Registration successful!');
+                $('#messageModal').modal('show');
+                setTimeout(() => {
+                    window.location.href = "{% url 'home' %}"; // Redirect to home page
+                }, 2000);
+            } else {
+                $('#messageBody').text(response.error);
+                $('#messageModal').modal('show');
+            }
+        },
+        error: function() {
+            $('#messageBody').text('An unexpected error occurred. Please try again.');
+            $('#messageModal').modal('show');
+        }
+    });
+});
+    </script>
+    <script type="text/javascript">
+        
+   // Open the booking modal when "Book Now" is clicked
+$('.book-now-btn').on('click', function() {
+    const serviceId = $(this).data('service-id');
+    $('#serviceId').val(serviceId); // Set the service ID in the hidden input
+    $('#bookingModal').modal('show'); // Open the modal
+});
+
+// Submit the booking form via AJAX
+$('#bookingForm').on('submit', function(e) {
+    e.preventDefault();
+
+    const formData = {
+        service_id: $('#serviceId').val(),
+        date: $('#date').val(),
+        time: $('#time').val(),
+    };
+    console.log($('#first_name').val().trim())
+    console.log('xssxx', $('#phone_number').val().trim())
+
+    // Include guest details if the user is not logged in
+    if (!{{ user.is_authenticated|yesno:"true,false" }}) {
+        formData.first_name = $('#b_first_name').val().trim();
+        formData.last_name = $('#b_last_name').val().trim();
+        formData.email = $('#b_email').val().trim();
+        formData.phone_number = $('#b_phone_number').val().trim();
+    }
+
+    // Debugging: Log the form data to the console
+    console.log("Form Data:", formData);
+
+    $.ajax({
+        url: "{% url 'book_appointment' %}", // URL to the Django view
+        method: "POST",
+        data: formData,
+        success: function(response) {
+            if (response.success) {
+                $('#bookingModal').modal('hide'); // Close the booking modal
+                showBookingConfirmation(response.appointment_date, response.service_name); // Show confirmation modal
+            } else {
+                // Display the error message in the UI
+                $('#messageBody').text(response.error);
+                $('#messageModal').modal('show');
+            }
+        },
+        error: function(xhr, status, error) {
+            // Handle unexpected errors (e.g., server issues)
+            $('#messageBody').text('An unexpected error occurred. Please try again.');
+            $('#messageModal').modal('show');
+        }
+    });
+});
+    </script>
+</body>
+</html>

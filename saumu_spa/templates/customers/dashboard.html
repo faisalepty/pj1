@@ -1,0 +1,49 @@
+<!-- templates/customers/dashboard.html -->
+{% extends 'base.html' %}
+
+{% block title %}Customer Dashboard - Saumu Salim Barbershop & Spa{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-8">
+        <h2 class="mb-4">Welcome, {{ user.customer.first_name }}!</h2>
+
+        <!-- Loyalty Points -->
+        <div class="card mb-4">
+            <div class="card-body">
+                <h5 class="card-title">Loyalty Points</h5>
+                <p class="card-text">Your current balance: <strong>{{ user.customer.loyalty_points }} points</strong></p>
+            </div>
+        </div>
+
+        <!-- Appointment History -->
+        <div class="card mb-4">
+            <div class="card-body">
+                <h5 class="card-title">Appointment History</h5>
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>Service</th>
+                            <th>Date</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for appointment in user.customer.appointment_set.all %}
+                            <tr>
+                                <td>{{ appointment.service.name }}</td>
+                                <td>{{ appointment.date }} at {{ appointment.time }}</td>
+                                <td>{{ appointment.status }}</td>
+                            </tr>
+                        {% empty %}
+                            <tr>
+                                <td colspan="3">No appointments found.</td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

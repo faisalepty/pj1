@@ -1,0 +1,14 @@
+<!-- templates/home.html -->
+{% extends '2_base.html' %}
+
+{% block title %}Home - Saumu Salim Barbershop & Spa{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-8 text-center">
+        <h1 class="mb-4">Welcome to Saumu Salim Barbershop & Spa</h1>
+        <p class="lead">Book an appointment today and enjoy our premium services!</p>
+        <a href="{% url 'book_appointment' %}" class="btn btn-primary btn-lg">Book Appointment</a>
+    </div>
+</div>
+{% endblock %}

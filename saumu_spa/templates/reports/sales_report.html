@@ -1,0 +1,57 @@
+<!-- templates/reports/sales_report.html -->
+{% extends 'base.html' %}
+
+{% block title %}Sales Report - Saumu Salim Barbershop & Spa{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-8">
+        <h2>Sales Report</h2>
+        <form method="post">
+            {% csrf_token %}
+            <div class="mb-3">
+                <label for="id_start_date" class="form-label">Start Date</label>
+                <input type="date" id="id_start_date" name="start_date" class="form-control" value="{{ start_date|date:'Y-m-d' }}">
+            </div>
+            <div class="mb-3">
+                <label for="id_end_date" class="form-label">End Date</label>
+                <input type="date" id="id_end_date" name="end_date" class="form-control" value="{{ end_date|date:'Y-m-d' }}">
+            </div>
+            <button type="submit" class="btn btn-primary">Filter</button>
+        </form>
+
+        <!-- Export Buttons -->
+        <div class="mt-3">
+            <a href="?export_csv" class="btn btn-success">Export as CSV</a>
+            <a href="#" class="btn btn-danger disabled">Export as PDF (Coming Soon)</a>
+        </div>
+
+        <!-- Total Revenue -->
+        <h3>Total Revenue: ${{ total_revenue }}</h3>
+
+        <!-- Most Popular Services -->
+        <h4>Most Popular Services</h4>
+        <ul>
+            {% for service in popular_services %}
+                <li>{{ service.service__name }} ({{ service.count }} bookings)</li>
+            {% empty %}
+                <li>No data available.</li>
+            {% endfor %}
+        </ul>
+
+        <!-- Peak Booking Times -->
+        <h4>Peak Booking Times</h4>
+        <ul>
+            {% for time in peak_times %}
+                <li>{{ time.appointment_date|date:"F j, Y, g:i a" }} ({{ time.count }} bookings)</li>
+            {% empty %}
+                <li>No data available.</li>
+            {% endfor %}
+        </ul>
+
+        <!-- Customer Retention Rates -->
+        <h4>Repeat Customers</h4>
+        <p>{{ repeat_customers }} customers have booked more than once.</p>
+    </div>
+</div>
+{% endblock %}

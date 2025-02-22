@@ -11,7 +11,7 @@ from django.http import JsonResponse
 def home(request):
     services = Service.objects.all()[:3]
     context = {'featured_services': services}
-    return render(request, '2_home.html', {'featured_services': services})
+    return render(request, '3_home.html', {'featured_services': services})
 from django.utils.timezone import make_aware
 from datetime import datetime
 

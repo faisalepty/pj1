@@ -1,0 +1,59 @@
+  <!-- templates/3_home.html -->
+{% extends 'services/3_base.html' %}
+{% load static %}
+{% block title %}Home - Saumu Salim Barbershop & Spa{% endblock %}
+
+{% block content %}
+
+
+
+
+  <!-- Hero Section -->
+   <section class="hero-section">
+    <video class="background-video" autoplay muted loop>
+        <source src="{% static 'images/220050_small.mp4' %}" type="video/mp4">
+        <!-- You can add more source tags for different video formats if needed -->
+    </video>
+    <div class="hero-content">
+         <h1>Welcome to</h1>
+            <h1 style="color: orange;"> Saumu Salim BarberShop &amp; Spa </h1>
+        <p>Discover thousands of books, manage your collection, and explore the world of knowledge.</p>
+         <a href="#" class="welcome-btn">Discover More</a>
+    </div>
+    </section>
+
+
+
+     <section class="services-section">
+        <h2>Our Services</h2>
+        <div class="">
+             <!-- Category Buttons -->
+
+        <div class="btn-group service-buttons">
+            <button class="btn_category active" data-category="all">All</button>
+
+            {% for value, lable in categories %}
+            <button class="btn_category" data-category="{{ value }}">{{ value }}</button>
+            {% endfor %}
+        </div>
+
+            <div class="row justify-content-center">
+                 {% for service in services %}
+                <div class="col-lg-3 col-md-4 col-sm-6 d-flex justify-content-center">
+                    <div class="service-box s-page" data-category="{{service.category}}">
+                        <img src="https://loremflickr.com/320/240" alt="Service 1">
+                        <h3>{{ service.name}}</h3>
+                        <p>{{ service.description }}</p>
+                         <p><strong>Price:</strong>{{ service.price}}</p>
+                        <p><strong>Duration:</strong> {{ service.duration }}</p>
+                      <button class="btn service-btn book-now-btn" data-service-id="{{ service.id }}">Book Now</button>
+
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </section>
+    
+
+{% endblock %}

@@ -62,6 +62,8 @@ def register(request):
         phone_number = request.POST.get('phone_number')
         password = request.POST.get('password')
 
+        print('username:', username,'first_name:', first_name, 'email:', email )
+
         # Check if the username or email is already registered
         if User.objects.filter(username=username).exists():
             return JsonResponse({'success': False, 'error': 'Username is already taken.'})

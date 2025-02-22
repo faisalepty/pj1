@@ -1,0 +1,153 @@
+<!-- templates/3_home.html -->
+{% extends 'services/3_base.html' %}
+{% load static %}
+{% block title %}Home - Saumu Salim Barbershop & Spa{% endblock %}
+
+{% block content %}
+
+
+<!-- hero section -->
+
+   <section class="hero-section">
+    <video class="background-video" autoplay muted loop>
+        <source src="{% static 'images/220050_small.mp4' %}">
+        <!-- You can add more source tags for different video formats if needed -->
+    </video>
+    <div class="hero-content">
+         <h1>Welcome to</h1>
+            <h1 style="color: orange;"> Saumu Salim BarberShop &amp; Spa </h1>
+        <p>Discover thousands of books, manage your collection, and explore the world of knowledge.</p>
+         <a href="/services/?category=all" class="service-btn all-services">View services</a>
+    </div>
+</section>
+
+<!-- end hero sec -->
+
+  <!-- Welcome Section -->
+    <section class="welcome-section">
+        <div class="welcome-box">
+            <h2>Welcome to</h2>
+            <h2 style="color: orange;"> Saumu Salim BarberShop &amp; Spa </h2>
+            <p>Indulge in expert grooming and rejuvenating spa treatments. Let us take care of you.</p>
+            <a href="#" class="welcome-btn">Discover More</a>
+        </div>
+    </section>
+
+
+<!-- end welcome sec -->
+
+<!-- service section -->
+
+ <section class="services-section">
+        <h2>Featured Service categories</h2>
+        <div class="container">
+            <div class="row justify-content-center">
+                <div class="col-lg-3 col-md-4 d-flex justify-content-center">
+                    <div class="service-box">
+                        <img src="https://loremflickr.com/320/240" alt="Service 1">
+                        <h3>Haircuts</h3>
+                        <p>Precision haircuts for all styles and trends.</p>
+                        <a href="/services/?category=haircut" class="service-btn haircuts-services">View Services</a>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-md-4 d-flex justify-content-center">
+                    <div class="service-box">
+                        <img src="https://loremflickr.com/320/240" alt="Service 2">
+                        <h3>Massage</h3>
+                        <p>Classic and modern shaves with premium products.</p>
+                        <a href="/services/?category=massage" class="service-btn massages-services">View Services</a>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-md-4 d-flex justify-content-center">
+                    <div class="service-box">
+                        <img src="https://loremflickr.com/320/240" alt="Service 3">
+                        <h3>Spa Treatments</h3>
+                        <p>Relaxing facials, massages, and more.</p>
+                        <a href="/services/?category=spa" class="service-btn spa-services">View Services</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+<!-- end service sec -->
+
+<!-- testimonials sec -->
+
+<section class="testimonials-section">
+          <div class="testimonial-text">
+            <h2>Testimonials</h2>
+            <p>See what our customers are saying about us.</p>
+        </div>
+        <div class="testimonial-container">
+            <div class="testimonial-wrapper" id="testimonial-wrapper">
+                <div class="testimonial-box">
+                    <div class="stars">&#9733; &#9733; &#9733; &#9733; &#9733;</div>
+                    <h4>Jess Kennedy</h4>
+                    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+                    <div class="position">Manager</div>
+                </div>
+                <div class="testimonial-box">
+                    <div class="stars">&#9733; &#9733; &#9733; &#9733;</div>
+                    <h4>Alex Johnson</h4>
+                    <p>Great experience, very professional and skilled staff.</p>
+                    <div class="position">Customer</div>
+                </div>
+                <div class="testimonial-box">
+                    <div class="stars">&#9733; &#9733; &#9733; &#9733; &#9733;</div>
+                    <h4>Emily Carter</h4>
+                    <p>Absolutely love the service!</p>
+                    <div class="position">Regular Client</div>
+                </div>
+            </div>
+            <div class="testimonial-nav">
+                <button class="t-nav-btn" onclick="prevTestimonial()">&#8592;</button>
+                <button class="t-nav-btn" onclick="nextTestimonial()">&#8594;</button>
+            </div>
+        </div>
+    </section>
+<!-- end testimonials -->
+
+
+<!-- team section -->
+
+<section class="team-section">
+        <div class="container">
+            <h2 class="section-title">Our Team</h2>
+            <div class="team-slider-container">
+                <button class="slider-btn prev-btn">&#8592;</button>
+                <div class="team-slider">
+                    <div class="team-card">
+                        <img src="https://loremflickr.com/320/240" alt="Michael Wilson">
+                        <div class="team-info ps-2">
+                            <h4>Michael Wilson</h4>
+                            <p class="role">UX/UI DESIGNER</p>
+                        </div>
+                    </div>
+                    <div class="team-card">
+                        <img src="https://loremflickr.com/320/240" alt="Jane Smith">
+                        <div class="team-info ps-2">
+                            <h4>Jane Smith</h4>
+                            <p class="role">CEO</p>
+                        </div>
+                    </div>
+                    <div class="team-card">
+                        <img src="https://loremflickr.com/320/240" alt="John Doe">
+                        <div class="team-info ps-2">
+                            <h4>John Doe</h4>
+                            <p class="role">COO</p>
+                        </div>
+                    </div>
+                    <div class="team-card">
+                        <img src="https://loremflickr.com/320/240" alt="Laura Kim">
+                        <div class="team-info ps-2">
+                            <h4>Laura Kim</h4>
+                            <p class="role">PROJECT MANAGER</p>
+                        </div>
+                    </div>
+                </div>
+                <button class="slider-btn next-btn">&#8594;</button>
+            </div>
+        </div>
+    </section>
+<!-- end team sec -->
+{% endblock %}

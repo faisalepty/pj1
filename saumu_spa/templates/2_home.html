@@ -1,6 +1,6 @@
 <!-- templates/2_home.html -->
 {% extends '2_base.html' %}
-
+{% load static %}
 {% block title %}Home - Saumu Salim Barbershop & Spa{% endblock %}
 
 {% block content %}
@@ -9,8 +9,8 @@
     <div class="carousel-inner">
         <!-- Slide 1: Promotional Offer -->
         <div class="carousel-item active">
-            <img src="https://via.placeholder.com/1920x1080" class="d-block w-100" alt="Promotional Offer">
-            <div class="carousel-caption d-none d-md-block">
+            <img src="{% static 'images/Snapn_1080.jpg' %}" class="d-block w-100" alt="Promotional Offer">
+            <div class="carousel-caption d-md-block">
                 <h2>20% Off on Massages!</h2>
                 <p>Relax and rejuvenate with our exclusive massage offers.</p>
                 <a href="#" class="btn btn-primary">Book Now</a>
@@ -19,8 +19,8 @@
 
         <!-- Slide 2: Featured Service -->
         <div class="carousel-item">
-            <img src="https://via.placeholder.com/1920x1080" class="d-block w-100" alt="Featured Service">
-            <div class="carousel-caption d-none d-md-block">
+            <img src="{% static 'images/Snapinsta.a8_n_1080.jpg' %}" class="d-block w-100" alt="Featured Service">
+            <div class="carousel-caption  d-md-block">
                 <h2>Signature Haircut</h2>
                 <p>Experience the art of precision with our signature haircut.</p>
                 <a href="#" class="btn btn-primary">Learn More</a>
@@ -29,8 +29,8 @@
 
         <!-- Slide 3: General Branding -->
         <div class="carousel-item">
-            <img src="https://via.placeholder.com/1920x1080" class="d-block w-100" alt="General Branding">
-            <div class="carousel-caption d-none d-md-block">
+            <img src="{% static 'images/26b1bf82bbf52de599be061e5d721479-removebg-preview.png' %}" class="d-block w-100" alt="General Branding">
+            <div class="carousel-caption d-md-block">
                 <h2>Welcome to Saumu Salim Barbershop & Spa</h2>
                 <p>Your ultimate destination for grooming and relaxation.</p>
                 <button class="btn btn-primary book-now-btn" data-service-id="1">Book Now</button>
@@ -49,9 +49,16 @@
         <span class="visually-hidden">Next</span>
     </button>
 </div>
+<section class="py-5">
+    <div class="container">
+        <h2 class="text-center mb-4">Welcome to Saumu Salim Barbershop & Spa</h2>
+        <p class="text-center">At Saumu Salim Barbershop & Spa, we are dedicated to providing the best grooming and relaxation services. Our team of experienced professionals is committed to ensuring that you leave our spa feeling refreshed and rejuvenated. Whether you're looking for a stylish haircut, a relaxing massage, or a revitalizing facial, we have something for everyone.</p>
+        <p class="text-center">Our mission is to create a welcoming and relaxing environment where you can unwind and enjoy top-notch services. We use only the highest quality products and the latest techniques to ensure that you receive the best possible care. Thank you for choosing Saumu Salim Barbershop & Spa. We look forward to serving you!</p>
+    </div>
+</section>
 
 <!-- Featured Services Section -->
-<section class="py-5">
+<section class="pt-2">
     <div class="container">
         <h2 class="text-center mb-4">Our Featured Services</h2>
         <div class="row">
@@ -59,7 +66,7 @@
             {% for service in featured_services %}
             <div class="col-md-4 mb-4">
                 <div class="card h-100">
-                    <img src="https://via.placeholder.com/300x200" class="card-img-top" alt="Haircut">
+                    <img src="{% static 'images/Snapinsta.a8_n_1080.jpg' %}" class="card-img-top" alt="Haircut">
                     <div class="card-body">
                         <h5 class="card-title">{{ service.name}}</h5>
                         <p class="card-text">{{ service.description}}</p>
@@ -70,11 +77,12 @@
                     </div>
                 </div>
             </div>
+            
             {% endfor %}
             <!-- Service Card 2 -->
             <div class="col-md-4 mb-4">
                 <div class="card h-100">
-                    <img src="https://via.placeholder.com/300x200" class="card-img-top" alt="Massage">
+                    <img src="{% static 'images/Snapinsta.a8_n_1080.jpg' %}" class="card-img-top" alt="Massage">
                     <div class="card-body">
                         <h5 class="card-title">Relaxing Massage</h5>
                         <p class="card-text">Unwind with our soothing massage therapy.</p>
@@ -89,7 +97,7 @@
             <!-- Service Card 3 -->
             <div class="col-md-4 mb-4">
                 <div class="card h-100">
-                    <img src="https://via.placeholder.com/300x200" class="card-img-top" alt="Facial">
+                    <img src="{% static 'images/Snapinsta.a8_n_1080.jpg' %}" class="card-img-top" alt="Facial">
                     <div class="card-body">
                         <h5 class="card-title">Rejuvenating Facial</h5>
                         <p class="card-text">Revitalize your skin with our premium facial treatments.</p>

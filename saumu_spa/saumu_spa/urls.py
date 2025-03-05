@@ -29,4 +29,5 @@ urlpatterns = [
     path('customers/', include('customers.urls')),  # Customer-related URLs
     path('billing/', include('billing.urls')),  # Billing-related URLs
     path('reports/', include('reports.urls')),  # Reporting URLs
+     path('staff/', include('staff.urls')), 
 ]

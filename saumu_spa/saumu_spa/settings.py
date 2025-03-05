@@ -15,6 +15,11 @@ from pathlib import Path
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
+CSRF_TRUSTED_ORIGINS = [
+    "https://3fe8-154-159-252-72.ngrok-free.app",
+    "http://127.0.0.1",
+    "http://localhost"
+]
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/5.1/howto/deployment/checklist/
@@ -25,7 +30,7 @@ SECRET_KEY = 'django-insecure-l7w%@0*3a#6wzbcwru^1d5jq2gyk0&-r72mhj^3l2on%_8&0yi
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['3fe8-154-159-252-72.ngrok-free.app', '127.0.0.1']
 
 LOGIN_URL = '/customers/login/'  # Redirect unauthenticated users to your custom login page
 # Application definition
@@ -37,6 +42,8 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+
+    'django_daraja',
 
     # Custom apps
     'customers',
@@ -120,6 +127,14 @@ USE_I18N = True
 
 USE_TZ = True
 
+from decouple import config
+
+MPESA_ENVIRONMENT = config('MPESA_ENVIRONMENT')
+MPESA_CONSUMER_KEY = config('MPESA_CONSUMER_KEY')
+MPESA_CONSUMER_SECRET = config('MPESA_CONSUMER_SECRET')
+MPESA_SHORTCODE = config('MPESA_SHORTCODE')
+MPESA_PASSKEY = config('MPESA_PASSKEY')
+MPESA_SHORTCODE_TYPE = config('MPESA_SHORTCODE_TYPE')
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.1/howto/static-files/

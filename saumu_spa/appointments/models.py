@@ -10,6 +10,7 @@ class Appointment(models.Model):
         ('pending', 'Pending'),
         ('confirmed', 'Confirmed'),
         ('completed', 'Completed'),
+        ('transacted', 'Transacted'),
         ('cancelled', 'Cancelled'),
     ]
     
@@ -20,6 +21,20 @@ class Appointment(models.Model):
     status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='pending')
     notes = models.TextField(blank=True, null=True)  # Optional notes for the appointment
     created_at = models.DateTimeField(auto_now_add=True)
+    
+    @property
+    def completion_percentage(self):
+        # Define logic for completion percentage based on status
+        if self.status == 'pending':
+            return 25
+        elif self.status == 'confirmed':
+            return 50
+        elif self.status == 'completed':
+            return 75
+        elif self.status == 'transacted':
+            return 100
+        else:
+            return 0
 
     def __str__(self):
-        return f"{self.customer} - {self.service} on {self.appointment_date}"
+        return f"{self.customer} - {self.service} ({self.status})"

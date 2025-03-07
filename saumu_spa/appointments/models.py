@@ -2,7 +2,7 @@ from django.db import models
 
 # Create your models here.
 from customers.models import Customer
-from services.models import Service
+from services.models import Service,  AdditionalTask
 from staff.models import Staff
 
 class Appointment(models.Model):
@@ -38,3 +38,16 @@ class Appointment(models.Model):
 
     def __str__(self):
         return f"{self.customer} - {self.service} ({self.status})"
+
+
+
+class TaskAssignment(models.Model):
+    appointment = models.ForeignKey(Appointment, on_delete=models.CASCADE, related_name='task_assignments')
+    staff = models.ForeignKey(Staff, on_delete=models.CASCADE)
+    service = models.ForeignKey(Service, on_delete=models.CASCADE, null=True, blank=True)  # For primary service
+    additional_task = models.ForeignKey(AdditionalTask, on_delete=models.CASCADE, null=True, blank=True)  # For additional tasks
+
+    def __str__(self):
+        if self.additional_task:
+            return f"{self.staff} - {self.additional_task.name}"
+        return f"{self.staff} - {self.service.name}"

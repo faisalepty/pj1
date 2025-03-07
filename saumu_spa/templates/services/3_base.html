@@ -1,9 +1,11 @@
+{% load static %}
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Library Management</title>
+    <title>Saumu Salim Barber shop & spa</title>
      <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
      <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
      <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
@@ -21,7 +23,7 @@
             background-color: #f7feff;
             border-radius: 40px;
             margin: 10px auto;
-            padding: 10px 20px;
+            padding: 0px 20px;
             width: 90%;
             box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
             position: fixed;
@@ -33,14 +35,21 @@
             align-items: center;
             justify-content: space-between;
         }
+        .navbar h2{
+            margin-bottom: 0;
+            color: orange;
+            font-weight: bold;
+
+        }
         .navbar-brand {
             font-weight: bold;
             display: flex;
             align-items: center;
         }
         .navbar-brand img {
-            height: 30px;
-            margin-right: 10px;
+            height: 44px;
+            width: 63px;
+            
         }
         .navbar-nav{
             text-align: left;
@@ -538,6 +547,9 @@
             display: flex;
             flex-direction: column;
         }
+        .navbar h2, .navbar span{
+            font-size: 1rem;
+        }
     }
     </style>
 </head>
@@ -558,9 +570,10 @@ document.addEventListener("DOMContentLoaded", function() {
 </script>
     <!-- navbar -->
     <nav class="navbar navbar-expand-lg">
-        <div class="container-fluid">
+        <div class="container-fluid ps-0">
             <a class="navbar-brand" href="#">
-                <img src="logo.png" alt="Logo"> Library
+                <img src="{% static 'images/mainlogo-removebg-preview.png' %}" alt="Logo"><span style="display: flex; flex-direction: column;"> <h2>Saumu Salim</h2> <span>Barbershop & spa</span></span>
+
             </a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
@@ -570,11 +583,20 @@ document.addEventListener("DOMContentLoaded", function() {
                       <li class="nav-item">
                         <a class="nav-link" href="{% url 'home' %}">Home</a>
                     </li>
-                      {% if user.is_staff %}
                     <li class="nav-item">
                         <a class="nav-link" href="{% url 'services' %}">Services</a>
                     </li>
+                      {% if user.is_staff %}
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'billing:admin_dashboard' %}">Admin Dashboard</a>
+                    </li>
                     {% endif%}
+                    {% if request.user.is_staff or request.user.staff.role == "barber" or request.user.staff.role == "masseus" or request.user.staff.role == "admin"%}
+                    <li class="nav-item">
+                            <a class="nav-link" href="{% url 'billing:staff_dashboard' %}">Staff Dashboard</a>
+                        </li>
+                        {%endif%}
+
                         {% if user.is_authenticated %}
                         <li class="nav-item">
                             <a class="nav-link" href="{% url 'customer_dashboard' %}">Dashboard</a>
@@ -601,6 +623,20 @@ document.addEventListener("DOMContentLoaded", function() {
 
  <!-- Main Content -->
     <div class="">
+           <section class="hero-section">
+    <video class="background-video" autoplay muted loop>
+        <source src="{% static 'images/220050_small.mp4' %}">
+        <!-- You can add more source tags for different video formats if needed -->
+    </video>
+    <div class="hero-content">
+         <h1>Welcome to</h1>
+            <h1 style="color: orange;"> Saumu Salim BarberShop &amp; Spa </h1>
+        <p>Discover thousands of books, manage your collection, and explore the world of knowledge.</p>
+         <a href="/services/?category=all" class="service-btn all-services">View services</a>
+    </div>
+</section>
+
+<!-- end hero sec -->
         {% block content %}
         <!-- Default content goes here -->
         {% endblock %}

@@ -16,3 +16,13 @@ class Service(models.Model):
 
     def __str__(self):
         return self.name
+
+
+class AdditionalTask(models.Model):
+    service = models.ForeignKey(Service, on_delete=models.CASCADE, related_name='additional_tasks')
+    name = models.CharField(max_length=100)
+    fixed_price = models.DecimalField(max_digits=10, decimal_places=2)  # Fixed price for the task
+    description = models.TextField(blank=True, null=True)
+
+    def __str__(self):
+        return f"{self.name} (Linked to {self.service.name})"

@@ -104,3 +104,198 @@ for appointment in appointments:
         )
 
 print("Database populated successfully!")
+
+
+
+
+from django.db import models
+from decimal import Decimal
+from django.utils import timezone
+from datetime import timedelta
+from services.models import Service  # Replace 'yourapp' with your app name
+
+# Clear existing data (optional)
+Service.objects.all().delete()
+
+# Hair Service data
+hair_services = [
+    {
+        "name": "Hair cut (Adults)",
+        "category": "haircut",
+        "duration": timedelta(hours=1),  # Assuming 1 hour
+        "price": Decimal("500.00"),
+        "description": "A classic haircut tailored for adults, ensuring a sharp and polished look."
+    },
+    {
+        "name": "Hair cut (Kids)",
+        "category": "haircut",
+        "duration": timedelta(hours=0.5),  # Assuming 30 minutes
+        "price": Decimal("300.00"),
+        "description": "A fun and quick haircut designed for kids, keeping them comfortable."
+    },
+    {
+        "name": "Dye/Color",
+        "category": "haircut",
+        "duration": timedelta(hours=2),  # Assuming 2 hours
+        "price": Decimal("1500.00"),
+        "description": "Professional hair dyeing service to add vibrant color or refresh your style."
+    },
+    {
+        "name": "Hair cut + Texturizing",
+        "category": "haircut",
+        "duration": timedelta(hours=2),  # Assuming 2 hours
+        "price": Decimal("1500.00"),
+        "description": "A combined haircut and texturizing service for added volume and style."
+    },
+    {
+        "name": "Beards",
+        "category": "haircut",
+        "duration": timedelta(minutes=30),  # Assuming 30 minutes
+        "price": Decimal("300.00"),
+        "description": "Expert beard trimming and shaping for a well-groomed appearance."
+    },
+    {
+        "name": "Outline",
+        "category": "haircut",
+        "duration": timedelta(minutes=30),  # Assuming 30 minutes
+        "price": Decimal("300.00"),
+        "description": "Precise outlining to define your haircut and enhance your look."
+    }
+]
+
+# Hair Removal & Nail Care data
+hair_removal_nail_care = [
+    {
+        "name": "Under arm (Waxing)",
+        "category": "spa",
+        "duration": timedelta(minutes=30),  # Default duration
+        "price": Decimal("500.00"),
+        "description": "Smooth underarm waxing for a clean and lasting result."
+    },
+    {
+        "name": "Brazilian (Waxing)",
+        "category": "spa",
+        "duration": timedelta(minutes=45),  # Default duration
+        "price": Decimal("2500.00"),
+        "description": "Full Brazilian waxing for a complete and comfortable hair removal experience."
+    },
+    {
+        "name": "Full legs (Waxing)",
+        "category": "spa",
+        "duration": timedelta(minutes=60),  # Default duration
+        "price": Decimal("1500.00"),
+        "description": "Full leg waxing for silky-smooth skin from thigh to ankle."
+    },
+    {
+        "name": "Half legs (Waxing)",
+        "category": "spa",
+        "duration": timedelta(minutes=30),  # Default duration
+        "price": Decimal("800.00"),
+        "description": "Half leg waxing for a quick and effective hair removal solution."
+    },
+    {
+        "name": "Upper lips & chin (Waxing)",
+        "category": "spa",
+        "duration": timedelta(minutes=30),  # Default duration
+        "price": Decimal("500.00"),
+        "description": "Gentle waxing for upper lips and chin to remove unwanted hair."
+    },
+    {
+        "name": "Spa pedicure",
+        "category": "spa",
+        "duration": timedelta(minutes=60),  # Default duration
+        "price": Decimal("1500.00"),
+        "description": "A relaxing pedicure with exfoliation, massage, and polish for healthy feet."
+    },
+    {
+        "name": "Spa manicure",
+        "category": "spa",
+        "duration": timedelta(minutes=60),  # Default duration
+        "price": Decimal("1500.00"),
+        "description": "A luxurious manicure with nail care, cuticle treatment, and polish."
+    },
+    {
+        "name": "Cut & File",
+        "category": "spa",
+        "duration": timedelta(minutes=30),  # Default duration
+        "price": Decimal("400.00"),
+        "description": "Basic nail trimming and filing for a neat and tidy appearance."
+    }
+]
+
+# Massage & Body Treatments data
+massage_body_treatments = [
+    {
+        "name": "Deep tissue massage",
+        "category": "massage",
+        "duration": timedelta(hours=1),
+        "price": Decimal("3500.00"),
+        "description": "A deep pressure massage to relieve muscle tension and improve mobility."
+    },
+    {
+        "name": "Swedish massage",
+        "category": "massage",
+        "duration": timedelta(hours=1),
+        "price": Decimal("2500.00"),
+        "description": "A gentle, relaxing massage to enhance circulation and reduce stress."
+    },
+    {
+        "name": "Back/Head massage",
+        "category": "massage",
+        "duration": timedelta(minutes=30),
+        "price": Decimal("2000.00"),
+        "description": "A targeted massage for back and head relief in a short session."
+    },
+    {
+        "name": "Aromatherapy massage",
+        "category": "massage",
+        "duration": timedelta(hours=1),
+        "price": Decimal("3000.00"),
+        "description": "A soothing massage with essential oils to promote relaxation and well-being."
+    },
+    {
+        "name": "Hot stone massage",
+        "category": "massage",
+        "duration": timedelta(hours=1, minutes=30),
+        "price": Decimal("4000.00"),
+        "description": "A luxurious massage with heated stones to melt away tension."
+    },
+    {
+        "name": "Reflexology massage",
+        "category": "massage",
+        "duration": timedelta(minutes=45),
+        "price": Decimal("1500.00"),
+        "description": "A foot-focused massage to stimulate energy flow and reduce stress."
+    },
+    {
+        "name": "Body scrub",
+        "category": "massage",
+        "duration": timedelta(minutes=30),  # Default duration
+        "price": Decimal("2500.00"),
+        "description": "An exfoliating scrub to remove dead skin and leave your body refreshed."
+    },
+    {
+        "name": "Full facial",
+        "category": "massage",
+        "duration": timedelta(minutes=60),  # Default duration
+        "price": Decimal("3500.00"),
+        "description": "A comprehensive facial treatment to cleanse, hydrate, and rejuvenate skin."
+    },
+    {
+        "name": "Face scrub & steam",
+        "category": "massage",
+        "duration": timedelta(minutes=30),  # Default duration
+        "price": Decimal("2000.00"),
+        "description": "A gentle scrub and steam session to purify and soften your skin."
+    }
+]
+
+# Combine all services
+all_services = hair_services + hair_removal_nail_care + massage_body_treatments
+
+# Create Service objects in the database
+for service_data in all_services:
+    service = Service(**service_data)
+    service.save()
+
+print("Services have been successfully added to the database!")

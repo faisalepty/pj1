@@ -6,6 +6,7 @@ from django.http import JsonResponse
 from django.shortcuts import render, get_object_or_404
 from django.core.paginator import Paginator
 from .models import Staff
+from django.contrib.auth.models import User
 
 # staff/views.py
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
@@ -89,7 +90,26 @@ def staff_create_update(request):
         staff.last_name = data.get('last_name')
         staff.role = data.get('role')
         staff.commission_rate = data.get('commission_rate')
+        base_username = f"{staff.first_name.lower()}_{staff.last_name.lower()}"
+        username = base_username
+
+        # Ensure the username is unique by checking the database
+        counter = 1
+        while User.objects.filter(username=username).exists():
+            username = f"{base_username}_{counter}"
+            counter += 1
+        user = User.objects.create_user(
+            username=username,
+            email=f"{username}@example.com",  # Default email
+            password='defaultpassword',  # Default password (you can change this later)
+            first_name=staff.first_name,
+            last_name=staff.last_name
+        )
+
+        # Link the User instance to the Staff instance
+        staff.user = user
         staff.save()
+        
 
         return JsonResponse({'success': True, 'message': 'Staff saved successfully.'})
 

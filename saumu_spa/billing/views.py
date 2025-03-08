@@ -1119,6 +1119,21 @@ def dashboard(request):
     start_of_last_month = last_month.replace(day=1, hour=0, minute=0, second=0, microsecond=0)
     end_of_last_month = start_of_month - timedelta(seconds=1)
 
+
+    current_month_sales = Billing.objects.filter(
+        created_at__range=(start_of_month, end_of_day),
+    ).count()
+    last_month_sales = Billing.objects.filter(
+        created_at__range=(start_of_last_month, end_of_last_month),
+    ).count()
+
+
+
+    monthly_sales_change = int(current_month_sales) - int(last_month_sales)
+
+    monthly_sales_change_abs = abs(monthly_sales_change) if monthly_sales_change != 0 else 0
+
+
     # Today's metrics
     todays_revenue = Billing.objects.filter(
         created_at__range=(start_of_day, end_of_day), appointment__status='transacted'
@@ -1136,7 +1151,7 @@ def dashboard(request):
     appointments_yesterday = Appointment.objects.filter(
         created_at__range=(start_of_yesterday, end_of_yesterday)
     ).count()
-
+  
     # Current month metrics
     current_month_revenue_g = Billing.objects.filter(
         created_at__range=(start_of_month, end_of_day),
@@ -1178,6 +1193,9 @@ def dashboard(request):
         'appointments': appointments,
         'staff_list': staff_list,
         'services': services,
+        'current_month_sales': current_month_sales,
+        'monthly_sales_change': monthly_sales_change,
+        'monthly_sales_change_abs': monthly_sales_change_abs,
         'current_month_revenue': current_month_revenue,
         'current_month_profit': current_month_profit,
         'todays_revenue': todays_revenue,

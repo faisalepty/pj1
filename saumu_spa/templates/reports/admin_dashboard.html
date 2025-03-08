@@ -28,7 +28,7 @@
     <i class="fas fa-calendar-check metric-icon"></i>
 </div>
 <div class="metric-card col-lg-3">
-    <h2>Clients Today</h2>
+    <h2>Sales Today</h2>
     <p class="metric-value">{{ appointments_today }}</p>
     <p class="metric-change {% if appointments_today_change > 0 %}positive{% elif appointments_today_change < 0 %}negative{% else %}neutral{% endif %}">
         {% if appointments_today_change > 0 %}
@@ -67,13 +67,21 @@
     <i class="fas fa-calendar-check metric-icon"></i>
 </div>
 <div class="metric-card col-lg-3">
-    <h2>Total Expenses</h2>
-    <p class="metric-value">1,200</p>
-    <p class="metric-change negative">−3% than yesterday</p>
+    <h2>Current month sales</h2>
+    <p class="metric-value">{{current_month_sales}}</p>
+    <p class="metric-change {% if monthly_sales_change > 0 %}positive{% elif monthly_sales_change < 0 %}negative{% else %}neutral{% endif %}">
+        {% if monthly_sales_change > 0 %}
+            {{ monthly_sales_change }} more than last month
+        {% elif monthly_sales_change < 0 %}
+            {{ monthly_sales_change_abs }} less than last month
+        {% else %}
+            Same as last month
+        {% endif %}
+    </p>
     <i class="fas fa-eye metric-icon"></i>
 </div>
 <div class="metric-card col-lg-3">
-    <h2>Total clients</h2>
+    <h2>Total sales</h2>
     <p class="metric-value">{{ total_appointments }}</p>
     <p class="metric-change" style="color: grey; margin-bottom: 0; text-align: left;">Clients Served</p>
    <!--  <p class="metric-change {% if total_appointments_change > 0 %}positive{% elif total_appointments_change < 0 %}negative{% else %}neutral{% endif %}">

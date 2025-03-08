@@ -20,7 +20,7 @@
     <i class="fas fa-dollar-sign metric-icon"></i>
 </div>
 <div class="metric-card col-lg-3">
-    <h2>Current Month clients</h2>
+    <h2>Current Month sales</h2>
     <p class="metric-value">{{ current_month_clients }}</p>
     <p class="metric-change {% if current_month_clients_change > 0 %}positive{% elif current_month_clients_change < 0 %}negative{% else %}neutral{% endif %}">
         {% if current_month_clients_change > 0 %}
@@ -42,7 +42,7 @@
     <i class="fas fa-eye metric-icon"></i>
 </div>
 <div class="metric-card col-lg-3">
-    <h2>Total clients</h2>
+    <h2>Total sales</h2>
     <p class="metric-value">{{ total_clients }}</p>
  <!--    <p class="metric-change {% if total_clients_change > 0 %}positive{% elif total_clients_change < 0 %}negative{% else %}neutral{% endif %}">
         {% if total_clients_change >= 0 %}+{% endif %}{{ total_clients_change }}% than yesterday

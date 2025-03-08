@@ -23,7 +23,13 @@
                  {% for service in services %}
                 <div class="col-lg-3 col-md-4 col-sm-6 d-flex justify-content-center">
                     <div class="service-box s-page" data-category="{{service.category}}">
-                        <img src="https://loremflickr.com/320/240" alt="Service 1">
+                        {% if service.image_url%}
+                        <img src="{{ service.image_url}}" alt="Service 1">
+                        {%else%}
+                        <img src="https://i.pinimg.com/236x/b2/74/a0/b274a0b4777d7f9de9a59bb8d5dafb7e.jpg" alt="Service 1">
+                        {% endif %}
+
+
                         <h3>{{ service.name}}</h3>
                         <p>{{ service.description }}</p>
                          <p><strong>Price:</strong>{{ service.price}}</p>

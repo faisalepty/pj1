@@ -518,6 +518,7 @@ def staff_sales(request, pk=None):
                     'staff_name': f"{staff.first_name} {staff.last_name}",
                     'payment_method': item['appointment'].billing.payment_method if hasattr(item['appointment'], 'billing') else 'N/A',
                     'amount_paid': str(item['amount_paid']),
+                    'date': item['appointment'].created_at.date(),
                     'status': item['appointment'].status,
                     'is_additional_task': item['is_additional_task'],
                     'main_task': item['appointment'].service.name if item['is_additional_task'] else "",

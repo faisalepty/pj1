@@ -93,6 +93,7 @@ def billing_list(request):
                 {
                     'id': b.id,
                     'appointment_id': b.appointment.id,
+                    'service': b.appointment.service.name,
                     'customer_name': f"{b.appointment.customer.first_name} {b.appointment.customer.last_name}"
                                      if b.appointment and b.appointment.customer else "Unknown Customer",
                     'staff_name': f"{b.appointment.staff.first_name} {b.appointment.staff.last_name}"
@@ -104,7 +105,7 @@ def billing_list(request):
                     'total': str(b.total or 0),
                     'status': b.appointment.status,  # Add status field
                     'completion_percentage': b.appointment.completion_percentage,  # Calculate completion percentage
-                    'created_at': b.created_at.strftime('%Y-%m-%d %H:%M:%S'),
+                    'created_at': b.created_at.date(),
                 }
                 for b in page_obj.object_list
             ],
@@ -1305,6 +1306,7 @@ def sales_list(request):
             'appointments': [
                 {
                     'id': appt.id,
+                    'date': appt.created_at.date(),
                     'customer_name': f"{appt.customer.first_name} {appt.customer.last_name}",
                     'staff_name': f"{appt.staff.first_name} {appt.staff.last_name}",
                     'amount_paid': str(appt.billing.total) if hasattr(appt, 'billing') and appt.billing else "0.00",

@@ -46,7 +46,7 @@
                         <th>DATE</th>
                         <th>SERVICE</th>
                         <th>PAYMENT METHOD</th>
-                        <th>AMOUNT PAID</th>
+                        <th>AMOUNT PAID(ksh)</th>
                         <th>COMPLETION</th>
                         <th>ACTION</th>
                     </tr>
@@ -160,7 +160,7 @@ function loadAppointments() {
                         <td>${item.date}</td>
                         <td>${item.task_name}${item.main_task ? ` (${item.main_task})` : ''}</td>
                         <td>${item.payment_method}</td>
-                        <td>$${item.amount_paid}</td>
+                        <td>${item.amount_paid}</td>
                         <td>${item.status}</td>
                         <td>
                             <div class="dropdown">

@@ -45,10 +45,11 @@
             <table>
                 <thead>
                     <tr>
-                        <th>CUSTOMER NAME</th>
+                        <th>DATE</th>
                         <th>STAFF NAME</th>
+                        <th>SERVICE</th>
                         <th>PAYMENT METHOD</th>
-                        <th>AMOUNT</th>
+                        <th>AMOUNT(ksh)</th>
                         <th>COMPLETION</th>
                         <th>ACTION</th>
                     </tr>
@@ -56,10 +57,10 @@
                 <tbody id="sales-table-body">
                     {% for billing in billings %}
                     <tr id="billing-row-{{ billing.id }}">
-                        <td>{{ billing.appointment.customer.first_name }} {{ billing.appointment.customer.last_name }}</td>
+                        <td>{{ billing.appointment.created_at }}</td>
                         <td>{{ billing.appointment.staff.first_name }} {{ billing.appointment.staff.last_name }}</td>
                         <td>{{ billing.payment_method }}</td>
-                        <td>${{ billing.amount_paid }}</td>
+                        <td>{{ billing.amount_paid }}</td>
                         
                       <!-- Progress Bar Column -->
 <td>
@@ -156,15 +157,19 @@ document.addEventListener('DOMContentLoaded', function () {
             .then(data => {
                 // Clear the table body
                 salesTableBody.innerHTML = '';
+                console.log(data)
 
                 // Populate the table with new data
                 data.billings.forEach(billing => {
+
                     const row = `
                         <tr id="billing-row-${billing.id}">
-                            <td>${billing.customer_name}</td>
+                            <td>${billing.created_at}</td>
+
                             <td>${billing.staff_name}</td>
+                            <td>${billing.service}</td>
                             <td>${billing.payment_method}</td>
-                            <td>$${billing.amount}</td>
+                            <td>${billing.amount}</td>
                             <td>
                                 <div class="progress-bar" style="width: ${billing.completion_percentage}%; 
                                     ${billing.status === 'completed' ? 'background-color: orange;' : ''}

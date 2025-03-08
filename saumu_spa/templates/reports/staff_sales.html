@@ -1,0 +1,236 @@
+<!-- reports/staff_dashboard.html -->
+{% extends 'reports/base.html' %}
+
+{% block content %}
+<h2 class="dashboard-title">My Dashboard</h2>
+<p class="dashboard-subtitle">View all your work, payments, and progress here.</p>
+
+<div class="projects-orders-row">
+    <div class="projects-card">
+        <div class="table-header">
+            <h2>My Work</h2>
+            <p class="projects-subtitle">5 completed this month</p>
+        </div>
+
+        <!-- Filter and Entries Dropdowns -->
+        <div class="dropdown-container">
+            <div class="filter-dropdown">
+                <button class="btn dropdown-toggle" type="button" id="statusFilterDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                    <i class="fas fa-filter"></i>
+                    <span id="statusFilterText">All Statuses</span>
+                </button>
+                <ul class="dropdown-menu status1" aria-labelledby="statusFilterDropdown">
+                    <li><a class="dropdown-item" href="#" data-value="">All Statuses</a></li>
+                    <li><a class="dropdown-item" href="#" data-value="completed">Completed Only</a></li>
+                    <li><a class="dropdown-item" href="#" data-value="transacted">Transacted Only</a></li>
+                </ul>
+            </div>
+
+            <div class="entries-dropdown">
+                <button class="btn dropdown-toggle" type="button" id="entriesPerPageDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                    Show: <span id="entriesPerPageText">10</span>
+                </button>
+                <ul class="dropdown-menu entries1" aria-labelledby="entriesPerPageDropdown">
+                    <li><a class="dropdown-item" href="#" data-value="10">10</a></li>
+                    <li><a class="dropdown-item" href="#" data-value="20">20</a></li>
+                    <li><a class="dropdown-item" href="#" data-value="30">30</a></li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Table -->
+        <div class="table-responsive">
+            <table>
+                <thead>
+                    <tr>
+                        <th>DATE</th>
+                        <th>SERVICE</th>
+                        <th>PAYMENT METHOD</th>
+                        <th>AMOUNT PAID</th>
+                        <th>COMPLETION</th>
+                        <th>ACTION</th>
+                    </tr>
+                </thead>
+                <tbody id="appointments-table-body">
+                    <!-- Rows will be dynamically populated here -->
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Pagination Controls -->
+        <div class="pagination">
+            <button id="prev-page" disabled>Previous</button>
+            <span>Page <span id="current-page">1</span> of <span id="total-pages">1</span></span>
+            <button id="next-page" disabled>Next</button>
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript">
+    document.addEventListener('DOMContentLoaded', function () {
+    const tableBody = document.getElementById('appointments-table-body');
+    const currentPageElement = document.getElementById('current-page');
+    const totalPagesElement = document.getElementById('total-pages');
+    const prevPageButton = document.getElementById('prev-page');
+    const nextPageButton = document.getElementById('next-page');
+
+    let currentPage = 1;
+    let entriesPerPage = 10;
+    let statusFilter = '';
+
+    // Load initial data
+    loadAppointments();
+
+    // Handle Status Filter Dropdown Changes
+    document.querySelectorAll('.status1 .dropdown-item').forEach(item => {
+        item.addEventListener('click', function (e) {
+            e.preventDefault();
+            statusFilter = this.getAttribute('data-value') || ''; // Get the selected status filter
+            document.getElementById('statusFilterText').innerText = this.innerText; // Update the dropdown text
+
+            currentPage = 1; // Reset to first page
+            loadAppointments(); // Reload the table with the new filter
+        });
+    });
+
+    // Handle Entries Per Page Dropdown Changes
+    document.querySelectorAll('.entries1 .dropdown-item').forEach(item => {
+        item.addEventListener('click', function (e) {
+            e.preventDefault();
+            entriesPerPage = parseInt(this.getAttribute('data-value')); // Get the selected entries per page
+            document.getElementById('entriesPerPageText').innerText = this.innerText; // Update the dropdown text
+
+            currentPage = 1; // Reset to first page
+            loadAppointments(); // Reload the table with the new entries per page
+        });
+    });
+
+
+
+    // Pagination buttons
+    prevPageButton.addEventListener('click', () => {
+        if (currentPage > 1) {
+            currentPage--;
+            loadAppointments();
+        }
+    });
+
+    nextPageButton.addEventListener('click', () => {
+        if (currentPage < parseInt(totalPagesElement.textContent)) {
+            currentPage++;
+            loadAppointments();
+        }
+    });
+
+    // Function to load appointments via AJAX
+function loadAppointments() {
+    // Get the current URL from the address bar
+    const currentUrl = window.location.pathname;
+    let url;
+
+    // Check if the URL matches the pattern /billing/staff-sales/<staffId>/
+    const staffIdMatch = currentUrl.match(/^\/billing\/staff-sales\/(\d+)\/?$/);
+    if (staffIdMatch) {
+        // If there's a staff ID in the URL (e.g., /billing/staff-sales/5/)
+        const staffId = staffIdMatch[1]; // Extract the staff ID (e.g., "5")
+        url = `/billing/staff-sales/${staffId}/`;
+    } else {
+        // If no staff ID is present (e.g., /billing/staff-sales/)
+        url = '/billing/staff-sales/';
+    }
+
+    // Append query parameters
+    url += `?page=${currentPage}&entries=${entriesPerPage}&status=${statusFilter}`;
+
+    fetch(url, {
+        headers: { 'X-Requested-With': 'XMLHttpRequest' },
+    })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+            return response.json();
+        })
+        .then(data => {
+            tableBody.innerHTML = ''; // Clear previous rows
+
+            data.appointments.forEach(item => {
+                const row = `
+                    <tr>
+                        <td>${item.date}</td>
+                        <td>${item.task_name}${item.main_task ? ` (${item.main_task})` : ''}</td>
+                        <td>${item.payment_method}</td>
+                        <td>$${item.amount_paid}</td>
+                        <td>${item.status}</td>
+                        <td>
+                            <div class="dropdown">
+                                <button class="btn btn-link text-dark p-0" type="button" data-bs-toggle="dropdown">
+                                    <i class="fas fa-ellipsis-h"></i>
+                                </button>
+                                <ul class="dropdown-menu dropdown-menu-end">
+                                    ${item.status === 'completed' ? `<li><a class="dropdown-item mark-transacted-link" href="#">Mark as Transacted</a></li>` : ''}
+                                    <li><a class="dropdown-item edit-link" href="#">Edit</a></li>
+                                    <li><a class="dropdown-item delete-link" href="#">Delete</a></li>
+                                </ul>
+                            </div>
+                        </td>
+                    </tr>
+                `;
+                tableBody.insertAdjacentHTML('beforeend', row);
+            });
+
+            // Update pagination controls
+            currentPageElement.textContent = data.pagination.current_page;
+            totalPagesElement.textContent = data.pagination.total_pages;
+            prevPageButton.disabled = !data.pagination.has_previous;
+            nextPageButton.disabled = !data.pagination.has_next;
+        })
+        .catch(error => console.error('Error loading appointments:', error));
+}
+
+    // // Function to load appointments via AJAX
+    // function loadAppointments() {
+    //     fetch(`/billing/staff-sales/?page=${currentPage}&entries=${entriesPerPage}&status=${statusFilter}`, {
+    //         headers: { 'X-Requested-With': 'XMLHttpRequest' },
+    //     })
+    //         .then(response => response.json())
+    //         .then(data => {
+    //             tableBody.innerHTML = ''; // Clear previous rows
+
+    //             data.appointments.forEach(item => {
+    //                 const row = `
+    //                      <tr>
+    //                         <td>${item.customer_name}</td>
+    //                        <td>${item.task_name}${item.main_task ? ` (${item.main_task})` : ''}</td>
+    //                         <td>${item.payment_method}</td>
+    //                         <td>$${item.amount_paid}</td>
+    //                         <td>${item.status}</td>
+    //                         <td>
+                                
+    //                             <div class="dropdown">
+    //                                 <button class="btn btn-link text-dark p-0" type="button" data-bs-toggle="dropdown">
+    //                                     <i class="fas fa-ellipsis-h"></i>
+    //                                 </button>
+    //                                 <ul class="dropdown-menu dropdown-menu-end">
+    //                                     ${item.status === 'completed' ? `<li><a class="dropdown-item mark-transacted-link" href="#">Mark as Transacted</a></li>` : ''}
+    //                                     <li><a class="dropdown-item edit-link" href="#">Edit</a></li>
+    //                                     <li><a class="dropdown-item delete-link" href="#">Delete</a></li>
+    //                                 </ul>
+    //                             </div>
+    //                         </td>
+    //                     </tr>
+    //                 `;
+    //                 tableBody.insertAdjacentHTML('beforeend', row);
+    //             });
+
+    //             // Update pagination controls
+    //             currentPageElement.textContent = data.pagination.current_page;
+    //             totalPagesElement.textContent = data.pagination.total_pages;
+    //             prevPageButton.disabled = !data.pagination.has_previous;
+    //             nextPageButton.disabled = !data.pagination.has_next;
+    //         })
+    //         .catch(error => console.error('Error loading appointments:', error));
+    // }
+});
+</script>
+{% endblock %}

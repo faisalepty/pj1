@@ -1,0 +1,312 @@
+{% extends 'reports/base.html' %}
+
+{% block content %}
+
+<h2 class="dashboard-title">Team Members</h2>
+<p class="dashboard-subtitle">List of your employees</p>
+<div class="projects-orders-row">
+    <div class="projects-card">
+        <div class="table-header">
+            <h2>Staff Members</h2>
+            <p class="projects-subtitle">5 completed this month</p>
+            <!-- Add Staff Button -->
+            <button class="add-staff-btn" data-bs-toggle="modal" data-bs-target="#staffModal">
+                <i class="fas fa-plus"></i> Add Staff
+            </button>
+        </div>
+
+        <!-- Filter and Entries Dropdowns -->
+        <div class="dropdown-container">
+            <div class="filter-dropdown">
+                <button class="btn dropdown-toggle" type="button" id="statusFilterDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                    <i class="fas fa-filter"></i>
+                    <span id="statusFilterText">All Roles</span>
+                </button>
+                <ul class="dropdown-menu status1" aria-labelledby="statusFilterDropdown">
+                    <li><a class="dropdown-item" href="#" data-value="">All Roles</a></li>
+                    <li><a class="dropdown-item" href="#" data-value="admin">Admin Only</a></li>
+                    <li><a class="dropdown-item" href="#" data-value="barber">Barber Only</a></li>
+                    <li><a class="dropdown-item" href="#" data-value="masseuse">Masseuse Only</a></li>
+                </ul>
+            </div>
+
+            <div class="entries-dropdown">
+                <button class="btn dropdown-toggle" type="button" id="entriesPerPageDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                    Show: <span id="entriesPerPageText">10</span>
+                </button>
+                <ul class="dropdown-menu entries1" aria-labelledby="entriesPerPageDropdown">
+                    <li><a class="dropdown-item" href="#" data-value="10">10</a></li>
+                    <li><a class="dropdown-item" href="#" data-value="20">20</a></li>
+                    <li><a class="dropdown-item" href="#" data-value="30">30</a></li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Table -->
+        <div class="table-responsive">
+            <table>
+                <thead>
+                    <tr>
+                        <th>FIRST NAME</th>
+                        <th>LAST NAME</th>
+                        <th>ROLE</th>
+                        <th>COMMISSION RATE</th>
+                        <th>ACTION</th>
+                    </tr>
+                </thead>
+                <tbody id="staff-table-body">
+                    {% for staff in staff %}
+                    <tr id="staff-row-{{ staff.id }}">
+                        <td>{{ staff.first_name }}</td>
+                        <td>{{ staff.last_name }}</td>
+                        <td>{{ staff.role }}</td>
+                        <td>{{ staff.commission_rate }}</td>
+                        <td>
+                            <div class="dropdown">
+                                <button class="btn btn-link text-dark p-0" type="button" id="actionsDropdown{{ staff.id }}" data-bs-toggle="dropdown" aria-expanded="false">
+                                    <i class="fas fa-ellipsis-h"></i>
+                                </button>
+                                <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="actionsDropdown{{ staff.id }}">
+                                    <li><a class="dropdown-item view-staff-dashboard" href="{%url 'billing:staff_dashboard' staff.id%}" data-id="{{ staff.id }}">View dashboard</a></li>
+                                     <li><a class="dropdown-item view-staff-dashboard" href="{%url 'billing:staff_sales' staff.id%}" data-id="{{ staff.id }}">View sales</a></li>
+                                    <li><a class="dropdown-item edit-staff-link" href="#" data-id="{{ staff.id }}">Edit</a></li>
+                                    <li><a class="dropdown-item delete-staff-link" href="#" data-id="{{ staff.id }}">Delete</a></li>
+                                </ul>
+                            </div>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Pagination Controls -->
+        <div class="pagination">
+            <button id="prev-page" disabled>Previous</button>
+            <span class="page-info">Page <span id="current-page">{{ staff.number }}</span> of <span id="total-pages">{{ staff.paginator.num_pages }}</span></span>
+            <button id="next-page" disabled>Next</button>
+        </div>
+    </div>
+</div>
+
+
+
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    const staffTableBody = document.getElementById('staff-table-body');
+    let currentPage = 1; // Default to page 1
+    let totalPages = 1; // Default to 1 page
+    let currentRoleFilter = ''; // Default: no role filter
+    let entriesPerPage = 10; // Default: 10 entries per page
+
+    // Load Staff Data via AJAX
+    function loadStaff(page = 1, roleFilter = '', entries = 10) {
+        const url = `/staff/list/?page=${page}&role=${roleFilter}&entries=${entries}`;
+        fetch(url, { headers: { 'X-Requested-With': 'XMLHttpRequest' } })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                return response.json();
+            })
+            .then(data => {
+                // Clear the table body
+                staffTableBody.innerHTML = '';
+
+                // Populate the table with new data
+                data.staff.forEach(staff => {
+                    const row = `
+                            <tr id="staff-row-${staff.id}">
+                            <td>${staff.first_name}</td>
+                            <td>${staff.last_name}</td>
+                            <td>${staff.role}</td>
+                            <td>${staff.commission_rate}</td>
+                            <td>
+                                <div class="dropdown">
+                                    <button class="btn btn-link text-dark p-0" type="button" id="actionsDropdown${staff.id}" data-bs-toggle="dropdown" aria-expanded="false">
+                                        <i class="fas fa-ellipsis-h"></i>
+                                    </button>
+                                    <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="actionsDropdown${staff.id}">
+                                        <li><a class="dropdown-item view-staff-dashboard" href="/billing/staff-dashboard/${staff.id}/" data-id="${staff.id}">View dashboard</a></li>
+                                        <li><a class="dropdown-item view-staff-dashboard" href="/billing/staff-sales/${staff.id}/" data-id="${staff.id}">View Sales</a></li>
+                                        <li><a class="dropdown-item edit-staff-link" href="#" data-id="${staff.id}">Edit</a></li>
+                                        <li><a class="dropdown-item delete-staff-link" href="#" data-id="${staff.id}">Delete</a></li>
+                                    </ul>
+                                </div>
+                            </td>
+                        </tr>
+                    `;
+                    staffTableBody.insertAdjacentHTML('beforeend', row);
+                });
+
+                // Update pagination controls
+                currentPage = data.pagination.current_page;
+                totalPages = data.pagination.total_pages;
+                document.getElementById('current-page').innerText = currentPage;
+                document.getElementById('total-pages').innerText = totalPages;
+
+                // Enable/disable "Previous" and "Next" buttons
+                document.getElementById('prev-page').disabled = !data.pagination.has_previous;
+                document.getElementById('next-page').disabled = !data.pagination.has_next;
+            })
+            .catch(error => {
+                console.error('Error loading staff data:', error);
+            });
+    }
+
+    // Handle Role Filter Dropdown Changes
+    document.querySelectorAll('.status1 .dropdown-item').forEach(item => {
+        item.addEventListener('click', function (e) {
+            e.preventDefault();
+            const roleFilter = this.getAttribute('data-value');
+            currentRoleFilter = roleFilter;
+
+            // Update the dropdown text
+            document.getElementById('statusFilterText').innerText = this.innerText;
+
+            // Reload the table with the new filter
+            loadStaff(1, roleFilter, entriesPerPage);
+        });
+    });
+
+    // Handle Entries Per Page Dropdown Changes
+    document.querySelectorAll('.entries1 .dropdown-item').forEach(item => {
+        item.addEventListener('click', function (e) {
+            e.preventDefault();
+            const entries = this.getAttribute('data-value');
+            entriesPerPage = parseInt(entries);
+
+            // Update the dropdown text
+            document.getElementById('entriesPerPageText').innerText = entries;
+
+            // Reload the table with the new entries per page
+            loadStaff(1, currentRoleFilter, entriesPerPage);
+        });
+    });
+
+    // Handle Previous Page Click
+    document.getElementById('prev-page').addEventListener('click', function () {
+        if (currentPage > 1) {
+            loadStaff(currentPage - 1, currentRoleFilter, entriesPerPage);
+        }
+    });
+
+    // Handle Next Page Click
+    document.getElementById('next-page').addEventListener('click', function () {
+        if (currentPage < totalPages) {
+            loadStaff(currentPage + 1, currentRoleFilter, entriesPerPage);
+        }
+    });
+
+  // Handle Save Button Click (Create/Update)
+    document.getElementById('saveStaffBtn').addEventListener('click', function () {
+        const form = document.getElementById('staffForm');
+        const formData = new FormData(form);
+        const data = Object.fromEntries(formData.entries());
+
+        fetch('/staff/create-update/', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRFToken': getCookie('csrftoken') // Get CSRF token from cookies
+            },
+            body: JSON.stringify(data),
+        })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                return response.json();
+            })
+            .then(result => {
+                if (result.success) {
+                    loadStaff(currentPage, currentRoleFilter, entriesPerPage); // Reload the table
+                    bootstrap.Modal.getInstance(document.getElementById('staffModal')).hide(); // Close modal
+                }
+            })
+            .catch(error => {
+                console.error('Error saving staff:', error);
+            });
+    });
+
+    // Handle Edit Link Click
+    staffTableBody.addEventListener('click', function (e) {
+        if (e.target.classList.contains('edit-staff-link')) {
+            e.preventDefault();
+            const staffId = e.target.getAttribute('data-id');
+            fetch(`/staff/${staffId}/`, { headers: { 'X-Requested-With': 'XMLHttpRequest' } })
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok');
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    document.getElementById('staffId').value = data.id;
+                    document.getElementById('firstName').value = data.first_name;
+                    document.getElementById('lastName').value = data.last_name;
+                    document.getElementById('role').value = data.role;
+                    document.getElementById('commissionRate').value = data.commission_rate;
+                    document.getElementById('staffModalLabel').innerText = 'Edit Staff';
+                    const modal = new bootstrap.Modal(document.getElementById('staffModal'));
+                    modal.show();
+                })
+                .catch(error => {
+                    console.error('Error fetching staff details:', error);
+                });
+        }
+    });
+
+    // Handle Delete Link Click
+    staffTableBody.addEventListener('click', function (e) {
+        if (e.target.classList.contains('delete-staff-link')) {
+            e.preventDefault();
+            if (confirm('Are you sure you want to delete this staff member?')) {
+                const staffId = e.target.getAttribute('data-id');
+                fetch('/staff/delete/', {
+                    method: 'DELETE',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRFToken': getCookie('csrftoken') // Get CSRF token from cookies
+                    },
+                    body: JSON.stringify({ id: staffId }),
+                })
+                    .then(response => {
+                        if (!response.ok) {
+                            throw new Error('Network response was not ok');
+                        }
+                        return response.json();
+                    })
+                    .then(result => {
+                        if (result.success) {
+                            loadStaff(currentPage, currentRoleFilter, entriesPerPage); // Reload the table
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error deleting staff:', error);
+                    });
+            }
+        }
+    });
+
+    // Initial Load
+    loadStaff(currentPage, currentRoleFilter, entriesPerPage);
+
+    // Helper function to get CSRF token from cookies
+    function getCookie(name) {
+        let cookieValue = null;
+        if (document.cookie && document.cookie !== '') {
+            const cookies = document.cookie.split(';');
+            for (let i = 0; i < cookies.length; i++) {
+                const cookie = cookies[i].trim();
+                if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                    cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                    break;
+                }
+            }
+        }
+        return cookieValue;
+    }
+});
+</script>
+{% endblock %}

@@ -1,0 +1,1 @@
+web: gunicorn saumu_spa.wsgi:application --log-file -

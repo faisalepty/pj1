@@ -1,0 +1,337 @@
+{% extends 'reports/base.html' %}
+
+{% block content %}
+<h2 class="dashboard-title">Services</h2>
+<p class="dashboard-subtitle">List of services offered</p>
+<div class="projects-orders-row">
+    <div class="projects-card">
+        <div class="table-header">
+            <h2>Services</h2>
+            <!-- Add Service Button -->
+            <p class="projects-subtitle">5 completed this month</p>
+            <button class="add-service-btn" data-bs-toggle="modal" data-bs-target="#serviceModal">
+                <i class="fas fa-plus"></i> Add Service
+            </button>
+        </div>
+
+        <!-- Filter and Entries Dropdowns -->
+        <div class="dropdown-container">
+            <div class="filter-dropdown">
+                <button class="btn dropdown-toggle" type="button" id="categoryFilterDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                    <i class="fas fa-filter"></i>
+                    <span id="categoryFilterText">All Categories</span>
+                </button>
+                <ul class="dropdown-menu status1" aria-labelledby="categoryFilterDropdown">
+                    <li><a class="dropdown-item" href="#" data-value="">All Categories</a></li>
+                    <li><a class="dropdown-item" href="#" data-value="haircut">Haircut Only</a></li>
+                    <li><a class="dropdown-item" href="#" data-value="massage">Massage Only</a></li>
+                    <li><a class="dropdown-item" href="#" data-value="spa">Spa Only</a></li>
+                </ul>
+            </div>
+
+            <div class="entries-dropdown">
+                <button class="btn dropdown-toggle" type="button" id="entriesPerPageDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                    Show: <span id="entriesPerPageText">10</span>
+                </button>
+                <ul class="dropdown-menu entries1" aria-labelledby="entriesPerPageDropdown">
+                    <li><a class="dropdown-item" href="#" data-value="10">10</a></li>
+                    <li><a class="dropdown-item" href="#" data-value="20">20</a></li>
+                    <li><a class="dropdown-item" href="#" data-value="30">30</a></li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Table -->
+        <div class="table-responsive">
+            <table>
+                <thead>
+                    <tr>
+                        <th>NAME</th>
+                        <th>CATEGORY</th>
+                        <th>DURATION</th>
+                        <th>PRICE</th>
+                        <th>DESCRIPTION</th>
+                        <th>ACTION</th>
+                    </tr>
+                </thead>
+                <tbody id="service-table-body">
+                    {% for service in services %}
+                    <tr id="service-row-{{ service.id }}">
+                        <td>{{ service.name }}</td>
+                        <td>{{ service.category }}</td>
+                        <td>{{ service.duration }}</td>
+                        <td>${{ service.price }}</td>
+                        <td>{{ service.description|default:"-" }}</td>
+                        <td>
+                            <div class="dropdown">
+                                <button class="btn btn-link text-dark p-0" type="button" id="actionsDropdown{{ service.id }}" data-bs-toggle="dropdown" aria-expanded="false">
+                                    <i class="fas fa-ellipsis-h"></i>
+                                </button>
+                                <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="actionsDropdown{{ service.id }}">
+                                    <li><a class="dropdown-item edit-service-link" href="#" data-id="{{ service.id }}">Edit</a></li>
+                                    <li><a class="dropdown-item delete-service-link" href="#" data-id="{{ service.id }}">Delete</a></li>
+                                </ul>
+                            </div>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Pagination Controls -->
+        <div class="pagination">
+            <button id="prev-page" disabled>Previous</button>
+            <span class="page-info">Page <span id="current-page">{{ services.number }}</span> of <span id="total-pages">{{ services.paginator.num_pages }}</span></span>
+            <button id="next-page" disabled>Next</button>
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript">
+ document.addEventListener('DOMContentLoaded', function () {
+    const addServiceBtn = document.querySelector('.add-service-btn');
+    const serviceForm = document.getElementById('serviceForm');
+
+    // Clear the form when the "Add Service" button is clicked
+    addServiceBtn.addEventListener('click', function () {
+        // Reset the form fields
+        serviceForm.reset();
+
+        // Optionally, reset dropdowns and hidden fields
+        document.getElementById('serviceId').value = ''; // Clear the hidden ID field
+        document.getElementById('category').selectedIndex = 0; // Reset the category dropdown
+
+        // Update the modal title
+        document.getElementById('serviceModalLabel').innerText = 'Add Service';
+    });
+});
+</script>
+
+
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    const serviceTableBody = document.getElementById('service-table-body');
+    let currentPage = 1; // Default to page 1
+    let totalPages = 1; // Default to 1 page
+    let currentCategoryFilter = ''; // Default: no category filter
+    let entriesPerPage = 10; // Default: 10 entries per page
+
+    // Load Service Data via AJAX
+    function loadServices(page = 1, categoryFilter = '', entries = 10) {
+        const url = `/services/list/?page=${page}&category=${categoryFilter}&entries=${entries}`;
+        fetch(url, { headers: { 'X-Requested-With': 'XMLHttpRequest' } })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                return response.json();
+            })
+            .then(data => {
+                // Clear the table body
+                serviceTableBody.innerHTML = '';
+
+                // Populate the table with new data
+                data.services.forEach(service => {
+                    const row = `
+                        <tr id="service-row-${service.id}">
+                            <td>${service.name}</td>
+                            <td>${service.category}</td>
+                            <td>${service.duration}</td>
+                            <td>$${service.price}</td>
+                            <td>${service.description || '-'}</td>
+                            <td>
+                                <div class="dropdown">
+                                    <button class="btn btn-link text-dark p-0" type="button" id="actionsDropdown${service.id}" data-bs-toggle="dropdown" aria-expanded="false">
+                                        <i class="fas fa-ellipsis-h"></i>
+                                    </button>
+                                    <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="actionsDropdown${service.id}">
+                                        <li><a class="dropdown-item edit-service-link" href="#" data-id="${service.id}">Edit</a></li>
+                                        <li><a class="dropdown-item delete-service-link" href="#" data-id="${service.id}">Delete</a></li>
+                                    </ul>
+                                </div>
+                            </td>
+                        </tr>
+                    `;
+                    serviceTableBody.insertAdjacentHTML('beforeend', row);
+                });
+
+                // Update pagination controls
+                currentPage = data.pagination.current_page;
+                totalPages = data.pagination.total_pages;
+                document.getElementById('current-page').innerText = currentPage;
+                document.getElementById('total-pages').innerText = totalPages;
+
+                // Enable/disable "Previous" and "Next" buttons
+                document.getElementById('prev-page').disabled = !data.pagination.has_previous;
+                document.getElementById('next-page').disabled = !data.pagination.has_next;
+            })
+            .catch(error => {
+                console.error('Error loading service data:', error);
+            });
+    }
+
+    // Handle Category Filter Dropdown Changes
+    document.querySelectorAll('.status1 .dropdown-item').forEach(item => {
+        item.addEventListener('click', function (e) {
+            e.preventDefault();
+            const categoryFilter = this.getAttribute('data-value');
+            currentCategoryFilter = categoryFilter;
+
+            // Update the dropdown text
+            document.getElementById('categoryFilterText').innerText = this.innerText;
+
+            // Reload the table with the new filter
+            loadServices(1, categoryFilter, entriesPerPage);
+        });
+    });
+
+    // Handle Entries Per Page Dropdown Changes
+    document.querySelectorAll('.entries1 .dropdown-item').forEach(item => {
+        item.addEventListener('click', function (e) {
+            e.preventDefault();
+            const entries = this.getAttribute('data-value');
+            entriesPerPage = parseInt(entries);
+
+            // Update the dropdown text
+            document.getElementById('entriesPerPageText').innerText = entries;
+
+            // Reload the table with the new entries per page
+            loadServices(1, currentCategoryFilter, entriesPerPage);
+        });
+    });
+
+    // Handle Previous Page Click
+    document.getElementById('prev-page').addEventListener('click', function () {
+        if (currentPage > 1) {
+            loadServices(currentPage - 1, currentCategoryFilter, entriesPerPage);
+        }
+    });
+
+    // Handle Next Page Click
+    document.getElementById('next-page').addEventListener('click', function () {
+        if (currentPage < totalPages) {
+            loadServices(currentPage + 1, currentCategoryFilter, entriesPerPage);
+        }
+    });
+
+    // Handle Save Button Click (Create/Update)
+    document.getElementById('saveServiceBtn').addEventListener('click', function () {
+        const form = document.getElementById('serviceForm');
+        const formData = new FormData(form);
+        const data = Object.fromEntries(formData.entries());
+         // Validate duration format (HH:MM:SS)
+    const duration = data.duration;
+    if (!/^(\d{1,2}):(\d{2}):(\d{2})$/.test(duration)) {
+        alert('Invalid duration format. Please use HH:MM:SS.');
+        return;
+    }
+
+        fetch('/services/create-update/', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRFToken': getCookie('csrftoken') // Get CSRF token from cookies
+            },
+            body: JSON.stringify(data),
+        })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                return response.json();
+            })
+            .then(result => {
+                if (result.success) {
+                    loadServices(currentPage, currentCategoryFilter, entriesPerPage); // Reload the table
+                    bootstrap.Modal.getInstance(document.getElementById('serviceModal')).hide(); // Close modal
+                }
+            })
+            .catch(error => {
+                console.error('Error saving service:', error);
+            });
+    });
+
+
+    // Handle Edit Link Click
+    serviceTableBody.addEventListener('click', function (e) {
+        if (e.target.classList.contains('edit-service-link')) {
+            e.preventDefault();
+            const serviceId = e.target.getAttribute('data-id');
+            fetch(`/services/${serviceId}/`, { headers: { 'X-Requested-With': 'XMLHttpRequest' } })
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok');
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    document.getElementById('serviceId').value = data.id;
+                    document.getElementById('name').value = data.name;
+                    document.getElementById('category').value = data.category;
+                    document.getElementById('duration').value = data.duration;
+                    document.getElementById('price').value = data.price;
+                    document.getElementById('description').value = data.description || '';
+                    document.getElementById('serviceModalLabel').innerText = 'Edit Service';
+                    const modal = new bootstrap.Modal(document.getElementById('serviceModal'));
+                    modal.show();
+                })
+                .catch(error => {
+                    console.error('Error fetching service details:', error);
+                });
+        }
+    });
+
+    // Handle Delete Link Click
+    serviceTableBody.addEventListener('click', function (e) {
+        if (e.target.classList.contains('delete-service-link')) {
+            e.preventDefault();
+            if (confirm('Are you sure you want to delete this service?')) {
+                const serviceId = e.target.getAttribute('data-id');
+                fetch('/services/delete/', {
+                    method: 'DELETE',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRFToken': getCookie('csrftoken') // Get CSRF token from cookies
+                    },
+                    body: JSON.stringify({ id: serviceId }),
+                })
+                    .then(response => {
+                        if (!response.ok) {
+                            throw new Error('Network response was not ok');
+                        }
+                        return response.json();
+                    })
+                    .then(result => {
+                        if (result.success) {
+                            loadServices(currentPage, currentCategoryFilter, entriesPerPage); // Reload the table
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error deleting service:', error);
+                    });
+            }
+        }
+    });
+
+    // Initial Load
+    loadServices(currentPage, currentCategoryFilter, entriesPerPage);
+
+    // Helper function to get CSRF token from cookies
+    function getCookie(name) {
+        let cookieValue = null;
+        if (document.cookie && document.cookie !== '') {
+            const cookies = document.cookie.split(';');
+            for (let i = 0; i < cookies.length; i++) {
+                const cookie = cookies[i].trim();
+                if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                    cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                    break;
+                }
+            }
+        }
+        return cookieValue;
+    }
+});
+</script>
+{% endblock %}
